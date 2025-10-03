@@ -1,18 +1,22 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import AddWord from "./pages/AddWord";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar.jsx";
+import AddWordForm from "./components/AddWordForm.jsx";
 import Vocabulary from "./pages/Vocabulary";
+import Revision from "./pages/Revision.jsx"
+import "./App.css"
 
-export default function App() {
+const App = () => {
   return (
-    <BrowserRouter>
-      <nav className="flex gap-4 p-4 bg-gray-100">
-        <Link to="/">Ajouter</Link>
-        <Link to="/vocabulaire">Vocabulaire</Link>
-      </nav>
+    <Router>
+      <Navbar />
       <Routes>
-        <Route path="/" element={<AddWord />} />
-        <Route path="/vocabulaire" element={<Vocabulary />} />
+        <Route path="/" element={<AddWordForm />} />
+        <Route path="/vocabulary" element={<Vocabulary />} />
+        <Route path="/revision" element={<Revision/>} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
-}
+};
+
+export default App;

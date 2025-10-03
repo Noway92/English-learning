@@ -1,0 +1,91 @@
+.vocabulary-container {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #000;
+  color: white;
+  min-height: 100vh;
+}
+
+.vocabulary-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.search-container {
+  margin-bottom: 1.5rem;
+  width: 100%;
+  max-width: 30rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #444;
+  background-color: #1a1a1a;
+  color: white;
+}
+
+.search-input::placeholder {
+  color: #aaa;
+}
+
+.table-container {
+  width: 100%;
+  max-width: 64rem;
+  overflow-x: auto;
+}
+
+.vocabulary-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #444;
+}
+
+.vocabulary-table th {
+  padding: 0.75rem;
+  text-align: left;
+  background-color: #1a1a1a;
+  color: white;
+}
+
+.vocabulary-table td {
+  padding: 0.75rem;
+  border: 1px solid #444;
+  color: white;
+}
+
+.understanding-perfect {
+  background-color: #10b981; /* vert */
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+}
+
+.understanding-medium {
+  background-color: #f59e0b; /* jaune */
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+}
+
+.understanding-low {
+  background-color: #ef4444; /* rouge */
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+}
+
+.understanding-good {
+  background-color: blue; /* bleu */
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+}

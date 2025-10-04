@@ -8,7 +8,7 @@ export default function Revision() {
   const [userAnswer, setUserAnswer] = useState("");
   const [showAnswer, setShowAnswer] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
-  const [understandingLevel, setUnderstandingLevel] = useState("medium");
+  const [understandingLevel, setUnderstandingLevel] = useState("bad");
   const [isEnglish, setIsEnglish] = useState(true);
 
   useEffect(() => {
@@ -70,6 +70,7 @@ export default function Revision() {
   if (selectedWord) {
     setIsEnglish(Math.random() < 0.5); // Alterner entre anglais et français
     setCurrentWord(selectedWord);
+    setUnderstandingLevel(selectedWord.understanding);
   } else {
     setCurrentWord(null); // Aucun mot à réviser
   }
@@ -146,7 +147,7 @@ export default function Revision() {
   }
 
   useEffect(() => {
-    selectWordToReview();
+    if (words.length>0) selectWordToReview();
   }, [words]);
   
   if (!currentWord) {
@@ -184,7 +185,7 @@ export default function Revision() {
             <label>Niveau de compréhension :</label>
             <select
               className="understanding-dropdown"
-              value={currentWord.understanding}
+              value={understandingLevel}
               onChange={(e) => setUnderstandingLevel(e.target.value)}
             >
               <option value="bad">Mauvais</option>

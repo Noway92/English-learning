@@ -24,7 +24,7 @@ const AddWordForm = () => {
     if (error) {
       console.error("Erreur lors de l'ajout du mot :", error);
     } else {
-      console.log("Mot ajouté avec succès :", data);
+      console.log("Mot ajouté avec succès :");
       // Réinitialiser le formulaire après l'ajout
       setWord("");
       setTranslation("");
@@ -40,7 +40,7 @@ const AddWordForm = () => {
           type="text"
           className="input"
           placeholder="Mot en anglais"
-          value={word}
+          value={word.toLowerCase()}
           onChange={(e) => setWord(e.target.value)}
           required
         />
@@ -48,7 +48,7 @@ const AddWordForm = () => {
           type="text"
           className="input"
           placeholder="Traduction française"
-          value={translation}
+          value={translation.toLowerCase()}
           onChange={(e) => setTranslation(e.target.value)}
           required
         />

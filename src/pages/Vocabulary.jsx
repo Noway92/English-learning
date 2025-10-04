@@ -18,6 +18,12 @@ export default function Vocabulary() {
     fetchWords();
   }, []);
 
+  const AudioAnglaisVoc = (word)=> {
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = "en-US";
+    speechSynthesis.speak(utterance);
+  }
+
   const filteredWords = words.filter(
     (w) =>
       w.english.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -57,6 +63,7 @@ export default function Vocabulary() {
               <th>Anglais</th>
               <th>Français</th>
               <th>Compréhension</th>
+              <th>Audio</th>
             </tr>
           </thead>
           <tbody>
@@ -68,6 +75,9 @@ export default function Vocabulary() {
                   <span className={getUnderstandingClass(w.understanding)}>
                     {w.understanding}
                   </span>
+                </td>
+                <td>
+                  <button className="audio-btn" onClick={() => AudioAnglaisVoc(w.english)}>🔊</button>
                 </td>
               </tr>
             ))}

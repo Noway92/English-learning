@@ -89,6 +89,14 @@
   border: 1px solid #444;
 }
 
+.button-class {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  gap: 1rem;
+}
+
 .next-button {
   padding: 0.75rem 1.5rem;
   background-color: #10b981;
@@ -96,8 +104,30 @@
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
+  width: 7rem;
 }
 
 .next-button:hover {
   background-color: #0d9488;
 }
+
+.audio-btn {
+    padding: 0.75rem;
+    background-color: transparent;
+    color: #495057;
+    border: 1px solid #dee2e6;
+    border-radius: 50%; /* Pour un bouton circulaire */
+    cursor: pointer;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.audio-btn:hover {
+    background-color: #f8f9fa;
+    border-color: #ced4da;
+}
+
+

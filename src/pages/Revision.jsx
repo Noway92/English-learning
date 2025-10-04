@@ -13,10 +13,17 @@ export default function Revision() {
 
   useEffect(() => {
     const fetchWords = async () => {
+      const today = new Date().toISOString(); 
+
       const { data, error } = await supabase
         .from("vocabulary")
-        .select("*");
-      if (!error) {
+        .select("*")
+        .neq("understanding", "perfect")
+        .lte("next_review_at", today); 
+
+      if (error) {
+      console.error("Erreur lors de la récupération des mots :", error);
+      } else {
         setWords(data);
       }
     };
@@ -24,22 +31,49 @@ export default function Revision() {
   }, []);
 
   const selectWordToReview = () => {
-    if (words.length === 0) return;
+    console.log(words)
+    // Séparer les mots en trois listes distinctes
+    const goodWords = words.filter(word => word.understanding === 'good');
+    const mediumWords = words.filter(word => word.understanding === 'medium');
+    const badWords = words.filter(word => word.understanding === 'bad');
 
-    // Filtrer les mots en fonction de leur niveau de compréhension
-    const filteredWords = words.filter((word) => {
-      return true; // On sélectionne tous les mots pour l'instant
-    });
+    let selectedWord = null;
+    let currentPhase = 'good';
 
-    if (filteredWords.length > 0) {
-      const randomIndex = Math.floor(Math.random() * filteredWords.length);
-      const selectedWord = filteredWords[randomIndex];
-      setIsEnglish(Math.random() < 0.5); // Alterner entre anglais et français
-      setCurrentWord(selectedWord);
-    } else {
-      setCurrentWord(null);
+  // Sélectionner aléatoirement en fonction de la phase actuelle
+  if (currentPhase === 'good' && goodWords.length > 0) {
+    const randomIndex = Math.floor(Math.random() * goodWords.length);
+    selectedWord = goodWords[randomIndex];
+  } else if (currentPhase === 'medium' && mediumWords.length > 0) {
+    const randomIndex = Math.floor(Math.random() * mediumWords.length);
+    selectedWord = mediumWords[randomIndex];
+  } else if (currentPhase === 'bad' && badWords.length > 0) {
+    const randomIndex = Math.floor(Math.random() * badWords.length);
+    selectedWord = badWords[randomIndex];
+  } else {
+    // Passer à la phase suivante si la liste actuelle est vide
+    if (currentPhase === 'good' && mediumWords.length > 0) {
+      currentPhase = 'medium';
+      const randomIndex = Math.floor(Math.random() * mediumWords.length);
+      selectedWord = mediumWords[randomIndex];
+    } else if (currentPhase === 'medium' && badWords.length > 0) {
+      currentPhase = 'bad';
+      const randomIndex = Math.floor(Math.random() * badWords.length);
+      selectedWord = badWords[randomIndex];
+    } else if (currentPhase === 'good' && badWords.length > 0) {
+      currentPhase = 'bad';
+      const randomIndex = Math.floor(Math.random() * badWords.length);
+      selectedWord = badWords[randomIndex];
     }
-  };
+  }
+
+  if (selectedWord) {
+    setIsEnglish(Math.random() < 0.5); // Alterner entre anglais et français
+    setCurrentWord(selectedWord);
+  } else {
+    setCurrentWord(null); // Aucun mot à réviser
+  }
+};
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -52,29 +86,74 @@ export default function Revision() {
   const handleNextWord = async () => {
     if (!currentWord) return;
 
-    // Mettre à jour le niveau de compréhension
-    const { error } = await supabase
-      .from("vocabulary")
-      .update({
-        understanding: understandingLevel,
-      })
-      .eq("id", currentWord.id);
+    // Vérifier si le niveau de compréhension a changé
+    const shouldUpdateUnderstanding = understandingLevel !== currentWord.understanding || understandingLevel!=="bad";
 
-    if (!error) {
-      setShowAnswer(false);
-      setUserAnswer("");
-      setIsCorrect(null);
-      selectWordToReview();
+    // Calculer la nouvelle date de révision en fonction du niveau de compréhension
+    let nextReviewAt;
+    const today = new Date();
+
+    if (understandingLevel === "perfect") {
+      // Ajouter 100 ans
+      nextReviewAt = new Date(today);
+      nextReviewAt.setFullYear(today.getFullYear() + 100);
+    } else if (understandingLevel === "good") {
+      // Ajouter 7 jours
+      nextReviewAt = new Date(today);
+      nextReviewAt.setDate(today.getDate() + 7);
+    } else if (understandingLevel === "medium") {
+      // Ajouter 2 jours
+      nextReviewAt = new Date(today);
+      nextReviewAt.setDate(today.getDate() + 3);
+    } else if (understandingLevel === "bad") {
+      // Laisser la date du jour
+      nextReviewAt = today;
     }
+
+    // Mettre à jour le niveau de compréhension uniquement si nécessaire
+    if (shouldUpdateUnderstanding) {
+      const { error } = await supabase
+        .from("vocabulary")
+        .update({
+          understanding: understandingLevel,
+          next_review_at: nextReviewAt.toISOString(), 
+        })
+        .eq("id", currentWord.id);
+
+      if (error) {
+        console.error("Erreur lors de la mise à jour du niveau de compréhension :", error);
+        return; // Arrêter si une erreur survient
+      }
+    }
+
+    // Réinitialiser, supprimer le mot actuel et passer au mot suivant
+
+    setShowAnswer(false);
+    setUserAnswer("");
+    setIsCorrect(null);
+    setWords((prevWords) => {
+      const newWords = prevWords.filter((word) => word.id !== currentWord.id);
+      return newWords;
+    });
+
   };
+
+
+  const AudioAnglais = ()=> {
+    const utterance = new SpeechSynthesisUtterance(currentWord.english);
+    utterance.lang = "en-US";
+    speechSynthesis.speak(utterance);
+  }
 
   useEffect(() => {
     selectWordToReview();
   }, [words]);
-
+  
   if (!currentWord) {
     return <div className="revision-container">Aucun mot à réviser pour le moment.</div>;
   }
+
+  
 
   return (
     <div className="revision-container">
@@ -105,7 +184,7 @@ export default function Revision() {
             <label>Niveau de compréhension :</label>
             <select
               className="understanding-dropdown"
-              value={understandingLevel}
+              value={currentWord.understanding}
               onChange={(e) => setUnderstandingLevel(e.target.value)}
             >
               <option value="bad">Mauvais</option>
@@ -114,8 +193,11 @@ export default function Revision() {
               <option value="perfect">Parfait</option>
             </select>
           </div>
+          <div className="button-class">
+            <button className="audio-btn" onClick={AudioAnglais}>🔊</button>
 
-          <button className="next-button" onClick={handleNextWord}>Mot suivant</button>
+            <button className="next-button" onClick={handleNextWord}>Mot suivant</button>
+          </div>
         </div>
       )}
     </div>

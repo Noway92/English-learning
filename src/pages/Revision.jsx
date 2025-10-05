@@ -147,7 +147,7 @@ export default function Revision() {
   }
 
   useEffect(() => {
-    if (words.length>0) selectWordToReview();
+    selectWordToReview();
   }, [words]);
   
   if (!currentWord) {

@@ -6,6 +6,7 @@ const AddWordForm = () => {
   const [word, setWord] = useState("");
   const [translation, setTranslation] = useState("");
   const [level, setLevel] = useState("bad");
+  const [category, setCaterory] = useState("Other");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,6 +19,7 @@ const AddWordForm = () => {
           english: word,
           french: translation,
           understanding: level,
+          category: category
         },
       ]);
 
@@ -29,6 +31,7 @@ const AddWordForm = () => {
       setWord("");
       setTranslation("");
       setLevel("bad");
+      setCaterory("Other")
     }
   };
 
@@ -53,7 +56,28 @@ const AddWordForm = () => {
           required
         />
         <select
-          className="select"
+          className="select-category"
+          value={level}
+          onChange={(e) => setCaterory(e.target.value)}
+        >
+          <option value="Other">Other</option>
+          <option value="Human being and development">Human being and development</option>
+          <option value="Mind, character and emotions">Mind, character and emotions</option>
+          <option value="Human actions and habilities">Human actions and habilities</option>
+          <option value="Food and daily needs">Food and daily needs</option>
+          <option value="Home and practical life">Home and practical life</option>
+          <option value="Free time, body and health">Free time, body and health</option>
+          <option value="Society">Society</option>
+          <option value="The world">The world</option>
+          <option value="Geopolitics">Geopolitics</option>
+          <option value="Economic activity">Economic activity</option>
+          <option value="Science and technologie">Science and technologie</option>
+          <option value="Art and culture">Art and culture</option>
+          <option value="Time">Time</option>
+          <option value="Notions">Notions</option>
+        </select>
+        <select
+          className="select-level"
           value={level}
           onChange={(e) => setLevel(e.target.value)}
         >

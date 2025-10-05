@@ -89,3 +89,32 @@
   border-radius: 9999px;
   font-size: 0.875rem;
 }
+
+
+/* Conteneur des filtres (recherche + catégorie) */
+.filters-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 30rem;
+}
+
+/* Sélecteur de catégorie */
+.category-select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #444;
+  background-color: #1a1a1a;
+  color: white;
+  font-size: 1rem;
+}
+
+/* Placeholder option style pour compatibilité */
+.category-select option {
+  background-color: #1a1a1a;
+  color: white;
+}

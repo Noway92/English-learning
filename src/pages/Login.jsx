@@ -22,8 +22,6 @@ const Login = ({ onLogin }) => {
         .eq("mdp", mdp)
         .single();
 
-        console.log(data)
-
      
         if (error) {
             throw new Error("Identifiant ou mot de passe incorrect");

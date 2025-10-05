@@ -22,7 +22,7 @@
   color: white;
 }
 
-.input, .select {
+.input, .select-level, .select-category {
   padding: 0.75rem;
   border: 1px solid #555;
   border-radius: 4px;
@@ -31,7 +31,7 @@
   color: white;
 }
 
-.input::placeholder, .select::placeholder {
+.input::placeholder, .select-level::placeholder, select-category::placeholder {
   color: #aaa;
 }
 

@@ -57,7 +57,7 @@ const AddWordForm = () => {
         />
         <select
           className="select-category"
-          value={level}
+          value={category}
           onChange={(e) => setCaterory(e.target.value)}
         >
           <option value="Other">Other</option>

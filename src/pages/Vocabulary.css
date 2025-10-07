@@ -118,3 +118,58 @@
   background-color: #1a1a1a;
   color: white;
 }
+
+
+/* Style pour les champs d'édition */
+.vocabulary-table input[type="text"],
+.vocabulary-table select {
+  width: 80%;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #444;
+  background-color: #1a1a1a;
+  color: white;
+  font-size: 1rem;
+}
+
+/* Style pour les boutons d'action */
+.vocabulary-table button.save-btn, button.cancel-btn, button.edit-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  background-color: #4b5563; /* gris */
+  color: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  margin-right: 0.5rem;
+}
+
+/* Style pour le bouton "Sauvegarder" */
+.vocabulary-table button.save-btn {
+  background-color: #10b981; /* vert */
+  margin-bottom: 0.5rem;
+}
+
+.vocabulary-table button.save-btn:hover {
+  background-color: #34d399; /* vert plus clair */
+}
+
+/* Style pour le bouton "Annuler" */
+.vocabulary-table button.cancel-btn {
+  background-color: #ef4444; /* rouge */
+}
+
+.vocabulary-table button.cancel-btn:hover {
+  background-color: #f87171; /* rouge plus clair */
+}
+
+/* Style pour les cellules en mode édition */
+.vocabulary-table tr.editing td {
+  background-color: #374151; /* bleu foncé */
+}
+
+/* Style pour les options des sélecteurs */
+.vocabulary-table select option {
+  background-color: #1a1a1a;
+  color: white;
+}

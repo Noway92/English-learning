@@ -10,6 +10,7 @@ export default function Revision() {
   const [isCorrect, setIsCorrect] = useState(null);
   const [understandingLevel, setUnderstandingLevel] = useState("bad");
   const [isEnglish, setIsEnglish] = useState(true);
+  const [currentPhase, setCurrentPhase] = useState('good')
 
   useEffect(() => {
     const fetchWords = async () => {
@@ -38,7 +39,6 @@ export default function Revision() {
     const badWords = words.filter(word => word.understanding === 'bad');
 
     let selectedWord = null;
-    let currentPhase = 'good';
 
   // Sélectionner aléatoirement en fonction de la phase actuelle
   if (currentPhase === 'good' && goodWords.length > 0) {
@@ -53,15 +53,15 @@ export default function Revision() {
   } else {
     // Passer à la phase suivante si la liste actuelle est vide
     if (currentPhase === 'good' && mediumWords.length > 0) {
-      currentPhase = 'medium';
+      setCurrentPhase('medium');
       const randomIndex = Math.floor(Math.random() * mediumWords.length);
       selectedWord = mediumWords[randomIndex];
     } else if (currentPhase === 'medium' && badWords.length > 0) {
-      currentPhase = 'bad';
+      setCurrentPhase('bad');
       const randomIndex = Math.floor(Math.random() * badWords.length);
       selectedWord = badWords[randomIndex];
     } else if (currentPhase === 'good' && badWords.length > 0) {
-      currentPhase = 'bad';
+      setCurrentPhase('bad');
       const randomIndex = Math.floor(Math.random() * badWords.length);
       selectedWord = badWords[randomIndex];
     }

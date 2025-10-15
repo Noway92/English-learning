@@ -169,7 +169,7 @@ export default function Vocabulary() {
                         <option value="perfect">Parfait</option>
                         <option value="medium">Moyen</option>
                         <option value="good">Bon</option>
-                        <option value="low">Faible</option>
+                        <option value="bad">Faible</option>
                       </select>
                     </td>
                     <td>

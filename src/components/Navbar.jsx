@@ -27,6 +27,9 @@ const Navbar = () => {
         <Link to="/revision" className="nav-link" onClick={() => setIsOpen(false)}>
           Révision
         </Link>
+        <Link to="/perfect" className="nav-link" onClick={() => setIsOpen(false)}>
+          Révision mot Parfait
+        </Link>
       </div>
     </nav>
   );

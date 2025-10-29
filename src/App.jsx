@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar.jsx";
 import AddWordForm from "./components/AddWordForm.jsx";
 import Vocabulary from "./pages/Vocabulary";
 import Revision from "./pages/Revision.jsx";
+import Perfect from "./pages/Perfect.jsx";
 import Login from "./pages/Login.jsx";
 import "./App.css"
 
@@ -52,6 +53,10 @@ const App = () => {
         <Route 
           path="/revision" 
           element={user ? <Revision /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/perfect" 
+          element={user ? <Perfect /> : <Navigate to="/login" />} 
         />
       </Routes>
     </Router>

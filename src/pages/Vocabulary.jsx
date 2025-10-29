@@ -92,7 +92,7 @@ export default function Vocabulary() {
 
   return (
     <div className="vocabulary-container">
-      <h1 className="vocabulary-title">Mon vocabulaire</h1>
+      <h1 className="vocabulary-title">Mon vocabulaire : {filteredWords.length} mots</h1>
       <div className="filters-container">
         <input
           type="text"

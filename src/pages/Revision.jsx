@@ -151,14 +151,14 @@ export default function Revision() {
   }, [words]);
   
   if (!currentWord) {
-    return <div className="revision-container">Pas de mot Parfait dans la liste.</div>;
+    return <div className="revision-container">Aucun mot à réviser pour le moment.</div>;
   }
 
   
 
   return (
     <div className="revision-container">
-      <h1 className="revision-title">Réviser un mot Parfait</h1>
+      <h1 className="revision-title">Réviser un mot</h1>
 
       <div className="word-display">
         <p className="word-text">{isEnglish ? currentWord.english : currentWord.french}</p>

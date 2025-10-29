@@ -10,24 +10,41 @@ export default function Perfect() {
   const [isCorrect, setIsCorrect] = useState(null);
   const [understandingLevel, setUnderstandingLevel] = useState("bad");
   const [isEnglish, setIsEnglish] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
     useEffect(() => {
         const fetchWords = async () => {
-        const today = new Date().toISOString(); 
+            const today = new Date().toISOString(); 
+            if (selectedCategory === "") {
+                const { data, error } = await supabase
+                    .from("vocabulary")
+                    .select("*")
+                    .eq("understanding", "perfect");
 
-        const { data, error } = await supabase
-            .from("vocabulary")
-            .select("*")
-            .eq("understanding", "perfect");
+                if (error) {
+                console.error("Erreur lors de la récupération des mots parfaits:", error);
+                } else {
+                    setWords(data);
+                    const uniqueCategories = [...new Set(data.map((w) => w.category))];
+                    setCategories(uniqueCategories);
+                }
+            } else {
+                const { data, error } = await supabase
+                    .from("vocabulary")
+                    .select("*")
+                    .eq("understanding", "perfect")
+                    .eq("category", selectedCategory);
 
-        if (error) {
-        console.error("Erreur lors de la récupération des mots parfaits:", error);
-        } else {
-            setWords(data);
-        }
+                if (error) {
+                console.error("Erreur lors de la récupération des mots parfaits:", error);
+                } else {
+                    setWords(data);
+                }
+            };
         };
         fetchWords();
-    }, []);
+    }, [selectedCategory]);
 
     const selectWordToReview = () => {
         console.log(words);
@@ -121,56 +138,84 @@ export default function Perfect() {
     }, [words]);
     
     if (!currentWord) {
-        return <div className="revision-container">Aucun mot à réviser pour le moment.</div>;
+        return (
+            <div className="revision-container">
+            <select
+            className="category-select"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            >
+            <option value="">Toutes les catégories</option>
+            {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                {cat}
+                </option>
+            ))}
+            </select>
+            <div className="revision-container">Pas de mot Parfait dans la liste.</div>
+            </div>
+        );
     }
 
   
 
     return (
         <div className="revision-container">
-        <h1 className="revision-title">Réviser un mot</h1>
+            <select
+            className="category-select"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            >
+            <option value="">Toutes les catégories</option>
+            {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                {cat}
+                </option>
+            ))}
+            </select>
+            <h1 className="revision-title">Réviser un mot Parfait ({words.length} {words.length === 1 ? 'mot' : 'mots'})</h1>
 
-        <div className="word-display">
-            <p className="word-text">{isEnglish ? currentWord.english : currentWord.french}</p>
-        </div>
-
-        <form className="answer-form" onSubmit={handleSubmit}>
-            <input
-            type="text"
-            className="answer-input"
-            placeholder="Votre réponse..."
-            value={userAnswer}
-            onChange={(e) => setUserAnswer(e.target.value)}
-            />
-            <button type="submit" className="submit-button">Vérifier</button>
-        </form>
-
-        {showAnswer && (
-            <div className="answer-feedback">
-            <p className={isCorrect ? "correct-answer" : "incorrect-answer"}>
-                {isCorrect ? "Correct !" : `La bonne réponse est : ${isEnglish ? currentWord.french : currentWord.english}`}
-            </p>
-
-            <div className="understanding-selector">
-                <label>Niveau de compréhension :</label>
-                <select
-                className="understanding-dropdown"
-                value={understandingLevel}
-                onChange={(e) => setUnderstandingLevel(e.target.value)}
-                >
-                <option value="bad">Mauvais</option>
-                <option value="medium">Moyen</option>
-                <option value="good">Bien</option>
-                <option value="perfect">Parfait</option>
-                </select>
+            <div className="word-display">
+                <p className="word-text">{isEnglish ? currentWord.english : currentWord.french}</p>
             </div>
-            <div className="button-class">
-                <button className="audio-btn" onClick={AudioAnglais}>🔊</button>
 
-                <button className="next-button" onClick={handleNextWord}>Mot suivant</button>
-            </div>
-            </div>
-        )}
+            <form className="answer-form" onSubmit={handleSubmit}>
+                <input
+                type="text"
+                className="answer-input"
+                placeholder="Votre réponse..."
+                value={userAnswer}
+                onChange={(e) => setUserAnswer(e.target.value)}
+                />
+                <button type="submit" className="submit-button">Vérifier</button>
+            </form>
+
+            {showAnswer && (
+                <div className="answer-feedback">
+                <p className={isCorrect ? "correct-answer" : "incorrect-answer"}>
+                    {isCorrect ? "Correct !" : `La bonne réponse est : ${isEnglish ? currentWord.french : currentWord.english}`}
+                </p>
+
+                <div className="understanding-selector">
+                    <label>Niveau de compréhension :</label>
+                    <select
+                    className="understanding-dropdown"
+                    value={understandingLevel}
+                    onChange={(e) => setUnderstandingLevel(e.target.value)}
+                    >
+                    <option value="bad">Mauvais</option>
+                    <option value="medium">Moyen</option>
+                    <option value="good">Bien</option>
+                    <option value="perfect">Parfait</option>
+                    </select>
+                </div>
+                <div className="button-class">
+                    <button className="audio-btn" onClick={AudioAnglais}>🔊</button>
+
+                    <button className="next-button" onClick={handleNextWord}>Mot suivant</button>
+                </div>
+                </div>
+            )}
         </div>
     );
 }

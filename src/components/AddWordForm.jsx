@@ -61,6 +61,7 @@ const AddWordForm = () => {
           onChange={(e) => setCaterory(e.target.value)}
         >
           <option value="Other">Other</option>
+          <option value="Work Knowledge">Work Knowledge</option>
           <option value="Human being and development">Human being and development</option>
           <option value="Mind, character and emotions">Mind, character and emotions</option>
           <option value="Human actions and habilities">Human actions and habilities</option>

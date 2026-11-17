@@ -31,6 +31,15 @@ body {
   text-decoration: underline;
 }
 
+button.nav-link {
+  background: none;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+
 /* ===== Bouton menu burger ===== */
 .menu-toggle {
   display: none;

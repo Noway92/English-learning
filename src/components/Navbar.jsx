@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { supabase } from "../lib/supabaseClient";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -30,6 +31,9 @@ const Navbar = () => {
         <Link to="/perfect" className="nav-link" onClick={() => setIsOpen(false)}>
           Révision mot Parfait
         </Link>
+        <button type="button" className="nav-link" onClick={() => supabase.auth.signOut()}>
+          Déconnexion
+        </button>
       </div>
     </nav>
   );

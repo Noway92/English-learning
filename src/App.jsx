@@ -6,29 +6,42 @@ import Vocabulary from "./pages/Vocabulary";
 import Revision from "./pages/Revision.jsx";
 import Perfect from "./pages/Perfect.jsx";
 import Login from "./pages/Login.jsx";
+import { supabase } from "./lib/supabaseClient";
 import "./App.css"
+
+const EMAILS_AUTORISES = (import.meta.env.VITE_EMAILS_AUTORISES ?? "")
+  .split(",")
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [refus, setRefus] = useState("");
 
-  // Vérifier si l'utilisateur est déjà connecté au chargement
   useEffect(() => {
-    const checkAuth = () => {
-      const savedUser = sessionStorage.getItem('user');
-      if (savedUser) {
-        setUser(JSON.parse(savedUser));
+    const appliquer = (session) => {
+      const u = session?.user ?? null;
+      if (u && !EMAILS_AUTORISES.includes((u.email ?? "").toLowerCase())) {
+        setRefus("Ce compte Google n'est pas autorisé.");
+        setUser(null);
+        supabase.auth.signOut();
+        return;
       }
-      setLoading(false);
+      setUser(u);
     };
 
-    checkAuth();
-  }, []);
+    supabase.auth.getSession().then(({ data }) => {
+      appliquer(data.session);
+      setLoading(false);
+    });
 
-  const login = (userData) => {
-    setUser(userData);
-    sessionStorage.setItem('user', JSON.stringify(userData));
-  };
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      appliquer(session);
+    });
+
+    return () => data.subscription.unsubscribe();
+  }, []);
 
   if (loading) {
     return <div className="loading">Chargement...</div>;
@@ -40,7 +53,7 @@ const App = () => {
       <Routes>
         <Route 
           path="/login" 
-          element={!user ? <Login onLogin={login} /> : <Navigate to="/" />} 
+          element={!user ? <Login refus={refus} /> : <Navigate to="/" />} 
         />
         <Route 
           path="/" 
